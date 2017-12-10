@@ -16,9 +16,9 @@ class ApaReference(Frame):
 
         # Variables
         self.article_title = StringVar()
-        self.c_first_name = StringVar()
-        self.c_middle_name = StringVar()
-        self.c_last_name = StringVar()
+        self.contributor_first_name = StringVar()
+        self.contributor_middle_name = StringVar()
+        self.contributor_last_name = StringVar()
         self.journal_title = StringVar()
         self.journal_volume = StringVar()
         self.journal_issue = StringVar()
@@ -40,13 +40,13 @@ class ApaReference(Frame):
         Label(contributors_frame, text='Contributors:', font=('', 11, 'bold')).grid(row=0, columnspan=3, sticky=W)
         # first name
         Label(contributors_frame, text='First Name').grid(row=1, sticky=W)
-        Entry(contributors_frame, width=20, textvariable=self.c_first_name).grid(row=2, column=0, sticky=W)
+        Entry(contributors_frame, width=20, textvariable=self.contributor_first_name).grid(row=2, column=0, sticky=W)
         # middle name
         Label(contributors_frame, text='MI').grid(row=1, column=1, sticky=W)
-        Entry(contributors_frame, width=5, textvariable=self.c_middle_name).grid(row=2, column=1, sticky=W)
+        Entry(contributors_frame, width=5, textvariable=self.contributor_middle_name).grid(row=2, column=1, sticky=W)
         # last name
         Label(contributors_frame, text='Last Name').grid(row=1, column=2, sticky=W)
-        Entry(contributors_frame, width=20, textvariable=self.c_last_name).grid(row=2, column=2, sticky=W)
+        Entry(contributors_frame, width=20, textvariable=self.contributor_last_name).grid(row=2, column=2, sticky=W)
         contributors_frame.pack(anchor=W)
 
         # Add Contributor Button
@@ -121,10 +121,11 @@ class ApaReference(Frame):
         self.create_journal_info_section()
 
     def add_contributor(self):
-        Contributor(self.c_first_name.get(), self.c_middle_name.get(), self.c_last_name.get())
-        self.c_first_name.set('')
-        self.c_middle_name.set('')
-        self.c_last_name.set('')
+        Contributor(self.contributor_first_name.get(), self.contributor_middle_name.get(),
+                    self.contributor_last_name.get())
+        self.contributor_first_name.set('')
+        self.contributor_middle_name.set('')
+        self.contributor_last_name.set('')
 
     def generate(self):
         contributors = sorted(Contributor.contributors)
