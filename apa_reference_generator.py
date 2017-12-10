@@ -38,24 +38,19 @@ class ApaReference:
                                         ).grid(row=0, columnspan=3, sticky=W)
         # first name
         self.first_name_label = Label(self.contributors_frame, text='First Name').grid(row=1, sticky=W)
-        self.contributors_first_name = Entry(self.contributors_frame, width=15,
+        self.contributors_first_name = Entry(self.contributors_frame, width=20,
                                              textvariable=self.c_first_name)
         self.contributors_first_name.grid(row=2, column=0, sticky=W)
         # middle name
         self.first_middle_label = Label(self.contributors_frame, text='MI').grid(row=1, column=1, sticky=W)
-        self.contributors_middle_name = Entry(self.contributors_frame, width=6,
+        self.contributors_middle_name = Entry(self.contributors_frame, width=5,
                                               textvariable=self.c_middle_name)
         self.contributors_middle_name.grid(row=2, column=1, sticky=W)
         # last name
         self.first_middle_label = Label(self.contributors_frame, text='Last Name').grid(row=1, column=2, sticky=W)
-        self.contributors_middle_name = Entry(self.contributors_frame, width=15,
+        self.contributors_middle_name = Entry(self.contributors_frame, width=20,
                                               textvariable=self.c_last_name)
         self.contributors_middle_name.grid(row=2, column=2, sticky=W)
-        # suffix
-        self.first_middle_label = Label(self.contributors_frame, text='Suffix').grid(row=1, column=3, sticky=W)
-        self.contributors_middle_name = Entry(self.contributors_frame, width=7,
-                                              textvariable=self.c_suffix)
-        self.contributors_middle_name.grid(row=2, column=3, sticky=W)
         self.contributors_frame.pack(anchor=W)
 
         # Add Contributor Button
@@ -82,18 +77,13 @@ class ApaReference:
 
         self.journal_volume = StringVar()
         Label(self.journal_advanced_info_frame, text="Volume").grid(row=2, column=0, sticky=W)
-        self.journal_volume = Entry(self.journal_advanced_info_frame, width=10, textvariable=self.journal_volume)
+        self.journal_volume = Entry(self.journal_advanced_info_frame, width=12, textvariable=self.journal_volume)
         self.journal_volume.grid(row=3, column=0, sticky=W)
 
         self.journal_issue = StringVar()
         Label(self.journal_advanced_info_frame, text='Issue').grid(row=2, column=1, sticky=W)
-        self.journal_issue = Entry(self.journal_advanced_info_frame, width=10, textvariable=self.journal_issue)
+        self.journal_issue = Entry(self.journal_advanced_info_frame, width=12, textvariable=self.journal_issue)
         self.journal_issue.grid(row=3, column=1, sticky=W)
-
-        self.journal_series = StringVar()
-        Label(self.journal_advanced_info_frame, text='Series').grid(row=2, column=2, sticky=W)
-        self.journal_series = Entry(self.journal_advanced_info_frame, width=10)
-        self.journal_series.grid(row=3, column=2, sticky=W)
 
         self.journal_advanced_info_frame.pack(anchor=W)
         # Year Published
@@ -135,11 +125,10 @@ class ApaReference:
         self.generate_frame.pack(expand=0, fill=X)
 
     def add_contributor(self):
-        Contributor(self.c_first_name.get(), self.c_middle_name.get(), self.c_last_name.get(), self.c_suffix.get())
+        Contributor(self.c_first_name.get(), self.c_middle_name.get(), self.c_last_name.get())
         self.c_first_name.set('')
         self.c_middle_name.set('')
         self.c_last_name.set('')
-        self.c_suffix.set('')
 
     def generate(self):
         contributors = sorted(Contributor.contributors)
@@ -157,7 +146,7 @@ class ApaReference:
 
         journal = Journal(self.article_title.get(), self.journal_title.get(), self.year_published.get(),
                           self.pages_start.get(), self.pages_end.get(), self.journal_volume.get(),
-                          self.journal_issue.get(), self.journal_series.get(), self.doi.get())
+                          self.journal_issue.get(), self.doi.get())
 
         reference = Reference(authors, journal.get_journal_entry())
 
