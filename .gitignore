@@ -170,3 +170,4 @@ pip-selfcheck.json
 out
 gen
 [Tt]cl
+__pycache__/

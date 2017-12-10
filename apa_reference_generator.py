@@ -1,4 +1,5 @@
 from tkinter import *
+from classes import *
 
 
 def create_separator():
@@ -59,7 +60,7 @@ class ApaReference:
 
         # Add Contributor Button
         self.add_contributor_btn = Frame(master, padx=5, pady=5)
-        Button(self.add_contributor_btn, text='+ Add another contributor').pack(anchor=E)
+        Button(self.add_contributor_btn, text='+ Add another contributor', command=self.add_contributor).pack(anchor=E)
         self.add_contributor_btn.pack(anchor=E)
 
         create_separator()
@@ -69,23 +70,27 @@ class ApaReference:
         self.journal_pub_info_label = Label(text='Journal Publication Info', padx=5)
 
         # TODO Journal title
+        self.journal_title = StringVar()
         self.journal_title_frame = Frame(self.journal_pub_info_frame)
         Label(self.journal_title_frame, text="Journal Title:").grid(row=0, column=0, sticky=W)
-        self.journal_title = Entry(self.journal_title_frame, width=45)
+        self.journal_title = Entry(self.journal_title_frame, width=45, textvariable=self.journal_title)
         self.journal_title.grid(row=1, column=0, sticky=W)
         self.journal_title_frame.pack(anchor=W)
         # Additional Info
         Label(self.journal_pub_info_frame, text="Additional Info", pady=10).pack(anchor=W)
-
         self.journal_advanced_info_frame = Frame(self.journal_pub_info_frame, pady=5)
+
+        self.journal_volume = StringVar()
         Label(self.journal_advanced_info_frame, text="Volume").grid(row=2, column=0, sticky=W)
-        self.journal_volume = Entry(self.journal_advanced_info_frame, width=10)
+        self.journal_volume = Entry(self.journal_advanced_info_frame, width=10, textvariable=self.journal_volume)
         self.journal_volume.grid(row=3, column=0, sticky=W)
 
+        self.journal_issue = StringVar()
         Label(self.journal_advanced_info_frame, text='Issue').grid(row=2, column=1, sticky=W)
-        self.journal_issue = Entry(self.journal_advanced_info_frame, width=10)
+        self.journal_issue = Entry(self.journal_advanced_info_frame, width=10, textvariable=self.journal_issue)
         self.journal_issue.grid(row=3, column=1, sticky=W)
 
+        self.journal_series = StringVar()
         Label(self.journal_advanced_info_frame, text='Series').grid(row=2, column=2, sticky=W)
         self.journal_series = Entry(self.journal_advanced_info_frame, width=10)
         self.journal_series.grid(row=3, column=2, sticky=W)
@@ -93,21 +98,31 @@ class ApaReference:
         self.journal_advanced_info_frame.pack(anchor=W)
         # Year Published
         self.year_published_frame = Frame(self.journal_pub_info_frame, pady=5)
+
+        self.year_published = StringVar()
         self.year_published_label = Label(self.year_published_frame, text='Year Published:').grid(row=0, sticky=W)
-        self.year_published_entry = Entry(self.year_published_frame, width=12).grid(row=1, column=0, sticky=W)
+        self.year_published_entry = Entry(self.year_published_frame, width=12, textvariable=self.year_published).grid(
+            row=1, column=0, sticky=W)
         self.year_published_frame.pack(anchor=W)
         # Pages - Start, End
         self.pub_pages_frame = Frame(self.journal_pub_info_frame, pady=5)
         self.pages_label = Label(self.pub_pages_frame, text='Pages:').grid(row=0, columnspan=2, sticky=W)
+
+        self.pages_start = StringVar()
         self.pages_start_label = Label(self.pub_pages_frame, text='Start').grid(row=1, column=0, sticky=W)
-        self.pages_start_entry = Entry(self.pub_pages_frame, width=5).grid(row=2, column=0, sticky=W)
+        self.pages_start_entry = Entry(self.pub_pages_frame, width=5, textvariable=self.pages_start).grid(row=2,
+                                                                                                          column=0,
+                                                                                                          sticky=W)
+        self.pages_end = StringVar()
         self.pages_start_label = Label(self.pub_pages_frame, text='End').grid(row=1, column=1, sticky=W)
-        self.pages_end_entry = Entry(self.pub_pages_frame, width=5).grid(row=2, column=1, sticky=W)
+        self.pages_end_entry = Entry(self.pub_pages_frame, width=5, textvariable=self.pages_end).grid(row=2, column=1,
+                                                                                                      sticky=W)
         self.pub_pages_frame.pack(anchor=W)
         # DOI
         self.pub_DOI_frame = Frame(self.journal_pub_info_frame)
-        self.DOI_label = Label(self.pub_DOI_frame, text='DOI:').grid(row=0, sticky=W)
-        self.DOI_entry = Entry(self.pub_DOI_frame, width=45).grid(row=1, column=0, sticky=W)
+        self.doi = StringVar()
+        self.DOI_label = Label(self.pub_DOI_frame, text='DOI/Website:').grid(row=0, sticky=W)
+        self.DOI_entry = Entry(self.pub_DOI_frame, width=45, textvariable=self.doi).grid(row=1, column=0, sticky=W)
         self.pub_DOI_frame.pack(anchor=W)
 
         self.journal_pub_info_label.pack(anchor=W)
@@ -115,9 +130,38 @@ class ApaReference:
 
         # Generate Button
         self.generate_frame = Frame(master, padx=5, pady=5)
-        self.gen_button = Button(self.generate_frame, text='Generate')
+        self.gen_button = Button(self.generate_frame, text='Generate', command=self.generate)
         self.gen_button.pack(expand=0, fill=X)
         self.generate_frame.pack(expand=0, fill=X)
+
+    def add_contributor(self):
+        Contributor(self.c_first_name.get(), self.c_middle_name.get(), self.c_last_name.get(), self.c_suffix.get())
+        self.c_first_name.set('')
+        self.c_middle_name.set('')
+        self.c_last_name.set('')
+        self.c_suffix.set('')
+
+    def generate(self):
+        contributors = sorted(Contributor.contributors)
+
+        if len(contributors) == 1:
+            authors = contributors[0]
+        elif len(contributors) == 2:
+            authors = ', & '.join(contributors)
+        elif 3 <= len(contributors) <= 7:
+            authors = (', '.join(contributors[0:-1]) + ', & {}'.format(contributors[-1]))
+        elif len(contributors) > 7:
+            authors = (', '.join(contributors[0:6]) + ',...{}'.format(contributors[-1]))
+        else:
+            authors = ''
+
+        journal = Journal(self.article_title.get(), self.journal_title.get(), self.year_published.get(),
+                          self.pages_start.get(), self.pages_end.get(), self.journal_volume.get(),
+                          self.journal_issue.get(), self.journal_series.get(), self.doi.get())
+
+        reference = Reference(authors, journal.get_journal_entry())
+
+        print(reference.get_reference())
 
 
 root = Tk()
