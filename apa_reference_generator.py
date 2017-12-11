@@ -189,9 +189,11 @@ class ApaReference(Frame):
         Contributor(self.contributor_first_name.get(), self.contributor_middle_name.get(),
                     self.contributor_last_name.get())
         self.update_contributor_list()
-        self.contributor_first_name.set('')
-        self.contributor_middle_name.set('')
-        self.contributor_last_name.set('')
+
+        # Reset contributor fields to empty
+        vars_to_eval = ('contributor_first_name', 'contributor_middle_name', 'contributor_last_name')
+        for v in vars_to_eval:
+            eval('self.' + v).set('')
 
     def add_reference(self):
         contributors = sorted(Contributor.contributors)
@@ -212,17 +214,14 @@ class ApaReference(Frame):
                           self.journal_issue.get(), self.doi.get())
 
         Reference(authors, journal.get_journal_entry())
-        self.article_title.set('')
-        self.contributor_first_name.set('')
-        self.contributor_middle_name.set('')
-        self.contributor_last_name.set('')
-        self.journal_title.set('')
-        self.journal_volume.set('')
-        self.journal_issue.set('')
-        self.year_published.set('')
-        self.pages_start.set('')
-        self.pages_end.set('')
-        self.doi.set('')
+
+        # reset all reference entry fields to empty
+        vars_to_eval = ('article_title', 'contributor_first_name', 'contributor_middle_name', 'contributor_last_name',
+                        'journal_title','journal_volume', 'journal_issue', 'year_published', 'pages_start', 'pages_end',
+                        'doi')
+        for v in vars_to_eval:
+            eval('self.'+v).set('')
+
         Contributor.contributors.clear()
         self.update_contributor_list()
         self.update_reference_list()
