@@ -196,18 +196,7 @@ class ApaReference(Frame):
             eval('self.' + v).set('')
 
     def add_reference(self):
-        contributors = sorted(Contributor.contributors)
-
-        if len(contributors) == 1:
-            authors = contributors[0]
-        elif len(contributors) == 2:
-            authors = ', & '.join(contributors)
-        elif 3 <= len(contributors) <= 7:
-            authors = (', '.join(contributors[0:-1]) + ', & {}'.format(contributors[-1]))
-        elif len(contributors) > 7:
-            authors = (', '.join(contributors[0:6]) + ',...{}'.format(contributors[-1]))
-        else:
-            authors = ''
+        authors = Contributor.get_contributors()
 
         journal = Journal(self.article_title.get(), self.journal_title.get(), self.year_published.get(),
                           self.pages_start.get(), self.pages_end.get(), self.journal_volume.get(),
@@ -217,8 +206,8 @@ class ApaReference(Frame):
 
         # reset all reference entry fields to empty
         vars_to_eval = ('article_title', 'contributor_first_name', 'contributor_middle_name', 'contributor_last_name',
-                        'journal_title','journal_volume', 'journal_issue', 'year_published', 'pages_start', 'pages_end',
-                        'doi')
+                        'journal_title', 'journal_volume', 'journal_issue', 'year_published', 'pages_start',
+                        'pages_end', 'doi')
         for v in vars_to_eval:
             eval('self.'+v).set('')
 

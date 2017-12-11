@@ -7,8 +7,9 @@ class Contributor:
                                           mi=(middle_initial[0] + '.').title() if middle_initial != '' else '')
         self.contributors.append(contributor)
 
-    def get_contributors(self):
-        contributors = sorted(self.contributors)
+    @classmethod
+    def get_contributors(cls):
+        contributors = sorted(cls.contributors)
 
         if len(contributors) == 1:
             authors = contributors[0]
