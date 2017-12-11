@@ -8,8 +8,8 @@ btn_primary = '#662d91'
 btn_active = '#501f75'
 
 
-def create_separator():
-    separator = Frame(height=2, bd=1, relief=FLAT, bg=separators)
+def create_separator(parent=None):
+    separator = Frame(parent, height=2, bd=1, relief=FLAT, bg=separators)
     separator.pack(fill=X, padx=5, pady=5)
 
 
@@ -18,8 +18,12 @@ class ApaReference(Frame):
         Frame.__init__(self)
         self.master.title('APA References')
         self.master.iconbitmap('favicon.ico')
-        self.master.resizable(width=False, height=False)
+        self.master.geometry('900x600')
+        self.master.resizable(width=True, height=False)
         self.master.config(bg=primary)
+        self.content_text = Text(self.master)
+        self.contributor_listbox = None
+        self.ref_listbox = None
 
         # Variables
         self.article_title = StringVar()
@@ -36,14 +40,14 @@ class ApaReference(Frame):
 
         self.build_apa_generator()
 
-    def create_article_section(self):
-        article_frame = Frame(self.master, padx=5, pady=5, bg=primary)
+    def create_article_section(self, parent):
+        article_frame = Frame(parent, padx=5, pady=5, bg=primary)
         Label(article_frame, text='Article Title:', bg=primary, fg=text_color).grid(row=0, sticky=W)
         Entry(article_frame, width=46, textvariable=self.article_title).grid(row=1, column=0, sticky=W)
         article_frame.pack(anchor=W)
 
-    def create_contributors_section(self):
-        contributors_frame = Frame(self.master, padx=5, pady=5, bg=primary)
+    def create_contributors_section(self, parent):
+        contributors_frame = Frame(parent, padx=5, pady=5, bg=primary)
         Label(contributors_frame, text='Contributors:', font=('', 11, 'bold'),
               bg=primary, fg=text_color).grid(row=0, columnspan=3, sticky=W)
         # first name
@@ -58,14 +62,14 @@ class ApaReference(Frame):
         contributors_frame.pack(anchor=W)
 
         # Add Contributor Button
-        add_contributor_btn = Frame(self.master, padx=5, pady=5, bg=primary)
+        add_contributor_btn = Frame(parent, padx=5, pady=5, bg=primary)
         Button(add_contributor_btn, text='+ Add another contributor', bg=btn_primary, activebackground=btn_active,
                activeforeground=text_color, fg=text_color, relief=FLAT, command=self.add_contributor).pack(anchor=E)
         add_contributor_btn.pack(anchor=E)
 
-    def create_journal_info_section(self):
-        journal_pub_info_frame = Frame(self.master, padx=5, pady=5, bg=primary)
-        journal_pub_info_label = Label(text='Journal Publication Info', padx=5, bg=primary, fg=text_color)
+    def create_journal_info_section(self, parent):
+        journal_pub_info_frame = Frame(parent, padx=5, pady=5, bg=primary)
+        journal_pub_info_label = Label(parent, text='Journal Publication Info', padx=5, bg=primary, fg=text_color)
 
         # Journal title
         journal_title_frame = Frame(journal_pub_info_frame, bg=primary)
@@ -112,33 +116,84 @@ class ApaReference(Frame):
         journal_pub_info_frame.pack(anchor=W)
 
         # Generate Button
-        generate_frame = Frame(self.master, padx=5, pady=5, bg=primary)
+        add_ref_frame = Frame(parent, padx=5, pady=5, bg=primary)
+        Button(add_ref_frame, text='Add Reference', bg=btn_primary, activebackground=btn_active,
+               activeforeground=text_color, fg=text_color, relief=FLAT,
+               command=self.add_reference).pack(expand=0, fill=X)
+        add_ref_frame.pack(expand=0, fill=X)
+        generate_frame = Frame(parent, padx=5, pady=5, bg=primary)
         gen_button = Button(generate_frame, text='Generate', bg=btn_primary, activebackground=btn_active,
                             activeforeground=text_color, fg=text_color, relief=FLAT, command=self.generate)
         gen_button.pack(expand=0, fill=X)
         generate_frame.pack(expand=0, fill=X)
+
+    def create_generated_reference_frame(self):
+        self.content_text.pack(side=LEFT, expand='yes', fill='both')
+        self.content_text.config(wrap='none', pady=5)
+
+        scroll_bar_y = Scrollbar(self.content_text)
+        self.content_text.configure(yscrollcommand=scroll_bar_y.set)
+        scroll_bar_y.config(command=self.content_text.yview)
+        scroll_bar_y.pack(side='right', fill='y')
+
+        scroll_bar_x = Scrollbar(self.content_text, orient=HORIZONTAL)
+        self.content_text.configure(xscrollcommand=scroll_bar_x.set)
+        scroll_bar_x.config(command=self.content_text.xview)
+        scroll_bar_x.pack(side='bottom', fill='x')
+
+    def create_contributor_listbox(self, parent):
+        Label(parent, text='Current Article Contributors', bg=primary, fg=text_color).pack()
+        self.contributor_listbox = Listbox(parent)
+        self.contributor_listbox.pack(fill=BOTH)
+        
+    def create_reference_listbox(self, parent):
+        Label(parent, text='Current References', bg=primary, fg=text_color).pack()
+        self.ref_listbox = Listbox(parent)
+        self.ref_listbox.pack(fill=BOTH)
 
     def build_apa_generator(self):
         # Title Label
         Label(self.master, text='APA References Generator', font=('', 14, 'bold'),
               padx=5, bg=primary, fg=text_color).pack()
         create_separator()
+        details_frame = Frame(self.master, bg=primary)
         # Article Frame
-        self.create_article_section()
+        self.create_article_section(details_frame)
         # Contributors Frame
-        self.create_contributors_section()
-        create_separator()
+        self.create_contributors_section(details_frame)
+        create_separator(details_frame)
         # Journal Info
-        self.create_journal_info_section()
+        self.create_journal_info_section(details_frame)
+        details_frame.pack(side=LEFT)
+
+        listbox_frame = Frame(self.master, padx=5, pady=5, bg=primary)
+        self.create_contributor_listbox(listbox_frame)
+        self.create_reference_listbox(listbox_frame)
+        listbox_frame.pack(side=LEFT, anchor=N)
+
+        self.create_generated_reference_frame()
+
+    def update_contributor_list(self):
+        contributors = sorted(Contributor.contributors)
+        self.contributor_listbox.delete(0, END)
+        for c in contributors:
+            self.contributor_listbox.insert(END, c)
+
+    def update_reference_list(self):
+        references = sorted(Reference.references)
+        self.ref_listbox.delete(0, END)
+        for r in references:
+            self.ref_listbox.insert(END, r)
 
     def add_contributor(self):
         Contributor(self.contributor_first_name.get(), self.contributor_middle_name.get(),
                     self.contributor_last_name.get())
+        self.update_contributor_list()
         self.contributor_first_name.set('')
         self.contributor_middle_name.set('')
         self.contributor_last_name.set('')
 
-    def generate(self):
+    def add_reference(self):
         contributors = sorted(Contributor.contributors)
 
         if len(contributors) == 1:
@@ -156,9 +211,26 @@ class ApaReference(Frame):
                           self.pages_start.get(), self.pages_end.get(), self.journal_volume.get(),
                           self.journal_issue.get(), self.doi.get())
 
-        reference = Reference(authors, journal.get_journal_entry())
+        Reference(authors, journal.get_journal_entry())
+        self.article_title.set('')
+        self.contributor_first_name.set('')
+        self.contributor_middle_name.set('')
+        self.contributor_last_name.set('')
+        self.journal_title.set('')
+        self.journal_volume.set('')
+        self.journal_issue.set('')
+        self.year_published.set('')
+        self.pages_start.set('')
+        self.pages_end.set('')
+        self.doi.set('')
+        Contributor.contributors.clear()
+        self.update_contributor_list()
+        self.update_reference_list()
 
-        print(reference.get_reference())
+    def generate(self):
+        self.content_text.delete(1.0, END)
+        references = '\n\n'.join(sorted(Reference.references))
+        self.content_text.insert(1.0, references)
 
 
 ApaReference().mainloop()
