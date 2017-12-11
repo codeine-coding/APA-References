@@ -19,7 +19,7 @@ class ApaReference(Frame):
         Frame.__init__(self)
         self.master.title('APA References')
         self.master.iconbitmap('favicon.ico')
-        # self.master.geometry('900x600')
+        self.center_window()
         self.master.resizable(width=True, height=False)
         self.master.config(bg=primary)
         self.content_text = None
@@ -40,6 +40,17 @@ class ApaReference(Frame):
         self.doi = StringVar()
 
         self.build_apa_generator()
+
+    def center_window(self):
+        w = 1155
+        h = 600
+
+        sw = self.master.winfo_screenwidth()
+        sh = self.master.winfo_screenheight()
+
+        x = int((sw - w) / 2)
+        y = int((sh - h) / 2)
+        self.master.geometry(f'{w}x{h}+{x}+{y}')
 
     def create_article_section(self, parent):
         article_frame = Frame(parent, padx=5, pady=5, bg=primary)
@@ -130,9 +141,23 @@ class ApaReference(Frame):
 
     def create_generated_reference_frame(self, parent):
         Label(parent, text='Generated References', bg=primary, fg=text_color).pack(anchor=W)
-        self.content_text = Text(parent)
-        self.content_text.pack(expand='yes', fill='both')
+        content_text_frame = Frame(parent)
+        self.content_text = Text(content_text_frame)
+        self.content_text.pack(expand='yes', fill='both', side=LEFT, anchor=NW)
         self.content_text.config(wrap='none', pady=5)
+
+        scroll_bar_y = Scrollbar(content_text_frame)
+        self.content_text.configure(yscrollcommand=scroll_bar_y.set)
+        scroll_bar_y.config(command=self.content_text.yview)
+        scroll_bar_y.pack(side=RIGHT, fill='y', anchor=E)
+        content_text_frame.pack(expand='yes', fill='both')
+
+        scroll_bar_x_frame = Frame(parent)
+        scroll_bar_x = Scrollbar(scroll_bar_x_frame, orient=HORIZONTAL)
+        self.content_text.configure(xscrollcommand=scroll_bar_x.set)
+        scroll_bar_x.config(command=self.content_text.xview)
+        scroll_bar_x.pack(side=BOTTOM, fill='x', anchor=SW)
+        scroll_bar_x_frame.pack(fill='x')
 
         save_btn_frame = Frame(parent, bg=primary)
         save_btn_frame.grid_rowconfigure(0, pad=5)
@@ -144,16 +169,6 @@ class ApaReference(Frame):
                activeforeground=text_color, fg=text_color,
                relief=FLAT, command=self.generate).grid(row=0, column=1, sticky=SE)
         save_btn_frame.pack(anchor=SE)
-
-        # scroll_bar_y = Scrollbar(self.content_text)
-        # self.content_text.configure(yscrollcommand=scroll_bar_y.set)
-        # scroll_bar_y.config(command=self.content_text.yview)
-        # scroll_bar_y.pack(side='right', fill='y')
-        #
-        # scroll_bar_x = Scrollbar(self.content_text, orient=HORIZONTAL)
-        # self.content_text.configure(xscrollcommand=scroll_bar_x.set)
-        # scroll_bar_x.config(command=self.content_text.xview)
-        # scroll_bar_x.pack(side='bottom', fill='x')
 
     def create_contributor_listbox(self, parent):
         Label(parent, text='Current Article Contributors', bg=primary, fg=text_color).pack()
@@ -185,7 +200,7 @@ class ApaReference(Frame):
         self.create_reference_listbox(listbox_frame)
         listbox_frame.pack(side=LEFT, anchor=N)
 
-        content_text_frame = Frame(self.master, padx=5, pady=5, bg=primary, width=300)
+        content_text_frame = Frame(self.master, padx=5, pady=5, bg=primary)
         self.create_generated_reference_frame(content_text_frame)
         content_text_frame.pack(expand='yes', side=LEFT, anchor=NW, fill=BOTH)
 
