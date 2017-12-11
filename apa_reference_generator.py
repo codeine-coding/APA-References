@@ -1,6 +1,6 @@
 from tkinter import *
-
 from classes import *
+import tkinter.filedialog
 
 primary = '#222b34'
 text_color = '#ffffff'
@@ -164,7 +164,7 @@ class ApaReference(Frame):
         save_btn_frame.grid_columnconfigure(0, pad=5)
         Button(save_btn_frame, text='Save as Text File', bg=btn_primary, activebackground=btn_active,
                activeforeground=text_color, fg=text_color,
-               relief=FLAT, command=self.generate).grid(row=0, sticky=SW)
+               relief=FLAT, command=self.save_as_txt).grid(row=0, sticky=SW)
         Button(save_btn_frame, text='Save as Word File', bg=btn_primary, activebackground=btn_active,
                activeforeground=text_color, fg=text_color,
                relief=FLAT, command=self.generate).grid(row=0, column=1, sticky=SE)
@@ -203,6 +203,22 @@ class ApaReference(Frame):
         content_text_frame = Frame(self.master, padx=5, pady=5, bg=primary)
         self.create_generated_reference_frame(content_text_frame)
         content_text_frame.pack(expand='yes', side=LEFT, anchor=NW, fill=BOTH)
+
+    def save_as_txt(self, event=None):
+        input_file_name = tkinter.filedialog.asksaveasfilename(defaultextension='.txt',
+                                                               filetypes=[
+                                                                   ("Text Documents", '*.text')
+                                                               ])
+        if input_file_name:
+            self.write_to_file(input_file_name)
+
+    def write_to_file(self, filename):
+        try:
+            content = self.content_text.get(1.0, END)
+            with open(filename, 'w') as the_file:
+                the_file.write(content)
+        except IOError:
+            pass
 
     def update_contributor_list(self):
         contributors = sorted(Contributor.contributors)
