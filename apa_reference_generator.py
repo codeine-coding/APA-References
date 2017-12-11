@@ -1,4 +1,5 @@
 from tkinter import *
+
 from classes import *
 
 primary = '#222b34'
@@ -18,10 +19,10 @@ class ApaReference(Frame):
         Frame.__init__(self)
         self.master.title('APA References')
         self.master.iconbitmap('favicon.ico')
-        self.master.geometry('900x600')
+        # self.master.geometry('900x600')
         self.master.resizable(width=True, height=False)
         self.master.config(bg=primary)
-        self.content_text = Text(self.master)
+        self.content_text = None
         self.contributor_listbox = None
         self.ref_listbox = None
 
@@ -127,25 +128,38 @@ class ApaReference(Frame):
         gen_button.pack(expand=0, fill=X)
         generate_frame.pack(expand=0, fill=X)
 
-    def create_generated_reference_frame(self):
-        self.content_text.pack(side=LEFT, expand='yes', fill='both')
+    def create_generated_reference_frame(self, parent):
+        Label(parent, text='Generated References', bg=primary, fg=text_color).pack(anchor=W)
+        self.content_text = Text(parent)
+        self.content_text.pack(expand='yes', fill='both')
         self.content_text.config(wrap='none', pady=5)
 
-        scroll_bar_y = Scrollbar(self.content_text)
-        self.content_text.configure(yscrollcommand=scroll_bar_y.set)
-        scroll_bar_y.config(command=self.content_text.yview)
-        scroll_bar_y.pack(side='right', fill='y')
+        save_btn_frame = Frame(parent, bg=primary)
+        save_btn_frame.grid_rowconfigure(0, pad=5)
+        save_btn_frame.grid_columnconfigure(0, pad=5)
+        Button(save_btn_frame, text='Save as Text File', bg=btn_primary, activebackground=btn_active,
+               activeforeground=text_color, fg=text_color,
+               relief=FLAT, command=self.generate).grid(row=0, sticky=SW)
+        Button(save_btn_frame, text='Save as Word File', bg=btn_primary, activebackground=btn_active,
+               activeforeground=text_color, fg=text_color,
+               relief=FLAT, command=self.generate).grid(row=0, column=1, sticky=SE)
+        save_btn_frame.pack(anchor=SE)
 
-        scroll_bar_x = Scrollbar(self.content_text, orient=HORIZONTAL)
-        self.content_text.configure(xscrollcommand=scroll_bar_x.set)
-        scroll_bar_x.config(command=self.content_text.xview)
-        scroll_bar_x.pack(side='bottom', fill='x')
+        # scroll_bar_y = Scrollbar(self.content_text)
+        # self.content_text.configure(yscrollcommand=scroll_bar_y.set)
+        # scroll_bar_y.config(command=self.content_text.yview)
+        # scroll_bar_y.pack(side='right', fill='y')
+        #
+        # scroll_bar_x = Scrollbar(self.content_text, orient=HORIZONTAL)
+        # self.content_text.configure(xscrollcommand=scroll_bar_x.set)
+        # scroll_bar_x.config(command=self.content_text.xview)
+        # scroll_bar_x.pack(side='bottom', fill='x')
 
     def create_contributor_listbox(self, parent):
         Label(parent, text='Current Article Contributors', bg=primary, fg=text_color).pack()
         self.contributor_listbox = Listbox(parent)
         self.contributor_listbox.pack(fill=BOTH)
-        
+
     def create_reference_listbox(self, parent):
         Label(parent, text='Current References', bg=primary, fg=text_color).pack()
         self.ref_listbox = Listbox(parent)
@@ -171,7 +185,9 @@ class ApaReference(Frame):
         self.create_reference_listbox(listbox_frame)
         listbox_frame.pack(side=LEFT, anchor=N)
 
-        self.create_generated_reference_frame()
+        content_text_frame = Frame(self.master, padx=5, pady=5, bg=primary, width=300)
+        self.create_generated_reference_frame(content_text_frame)
+        content_text_frame.pack(expand='yes', side=LEFT, anchor=NW, fill=BOTH)
 
     def update_contributor_list(self):
         contributors = sorted(Contributor.contributors)
@@ -209,7 +225,7 @@ class ApaReference(Frame):
                         'journal_title', 'journal_volume', 'journal_issue', 'year_published', 'pages_start',
                         'pages_end', 'doi')
         for v in vars_to_eval:
-            eval('self.'+v).set('')
+            eval('self.' + v).set('')
 
         Contributor.contributors.clear()
         self.update_contributor_list()
