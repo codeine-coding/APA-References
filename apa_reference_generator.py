@@ -216,12 +216,6 @@ class ApaReference(Frame):
         self.create_generated_reference_frame(content_text_frame)
         content_text_frame.pack(expand='yes', side=LEFT, anchor=NW, fill=BOTH)
 
-        vars_to_eval = ('article_title', 'contributor_first_name', 'contributor_middle_name', 'contributor_last_name',
-                        'journal_title', 'journal_volume', 'journal_issue', 'year_published', 'pages_start',
-                        'pages_end', 'doi')
-        for v in vars_to_eval:
-            eval('self.' + v).set(v)
-
     def save_as_txt(self, event=None):
         input_file_name = tkinter.filedialog.asksaveasfilename(defaultextension='.txt',
                                                                filetypes=[
