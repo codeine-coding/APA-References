@@ -80,6 +80,7 @@ class Reference:
     @classmethod
     def create_word_doc(cls, filename):
         doc = docx.Document()
+        doc.add_paragraph('References').alignment = WD_ALIGN_PARAGRAPH.CENTER
         for r in cls.get_sorted_references():
             p1 = f"{r.contributors} ({r.journal.year_published}). {r.journal.article_title}. "
 
@@ -113,7 +114,7 @@ class Reference:
                 j_doi = f" {r.journal.doi}"
             else:
                 j_doi = ''
-            doc.add_paragraph('References').alignment = WD_ALIGN_PARAGRAPH.CENTER
+
             ref = doc.add_paragraph(p1)
             ref.add_run(j_title).italic = True
             ref.add_run(j_volume).italic = True
