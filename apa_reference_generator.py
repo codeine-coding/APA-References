@@ -1,6 +1,7 @@
 from tkinter import *
 from classes import *
 import tkinter.filedialog
+import docx
 
 primary = '#222b34'
 text_color = '#ffffff'
@@ -167,7 +168,7 @@ class ApaReference(Frame):
                relief=FLAT, command=self.save_as_txt).grid(row=0, sticky=SW)
         Button(save_btn_frame, text='Save as Word File', bg=btn_primary, activebackground=btn_active,
                activeforeground=text_color, fg=text_color,
-               relief=FLAT, command=self.generate).grid(row=0, column=1, sticky=SE)
+               relief=FLAT, command=self.save_as_docx).grid(row=0, column=1, sticky=SE)
         save_btn_frame.pack(anchor=SE)
 
     def create_contributor_listbox(self, parent):
@@ -207,7 +208,7 @@ class ApaReference(Frame):
     def save_as_txt(self, event=None):
         input_file_name = tkinter.filedialog.asksaveasfilename(defaultextension='.txt',
                                                                filetypes=[
-                                                                   ("Text Documents", '*.text')
+                                                                   ("Text Documents", '*.txt')
                                                                ])
         if input_file_name:
             self.write_to_file(input_file_name)
@@ -219,6 +220,20 @@ class ApaReference(Frame):
                 the_file.write(content)
         except IOError:
             pass
+
+    def save_as_docx(self, event=None):
+        input_file_name = tkinter.filedialog.asksaveasfilename(defaultextension='.docx',
+                                                               filetypes=[
+                                                                   ("Word Documents", '*.docx')
+                                                               ])
+        if input_file_name:
+            self.create_word_doc(input_file_name)
+
+    def create_word_doc(self, filename):
+        doc = docx.Document()
+        for r in sorted(Reference.references):
+            doc.add_paragraph(r)
+        doc.save(filename)
 
     def update_contributor_list(self):
         contributors = sorted(Contributor.contributors)
