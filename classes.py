@@ -113,7 +113,7 @@ class Reference:
                 j_doi = f" {r.journal.doi}"
             else:
                 j_doi = ''
-            doc.add_paragraph('Work Cited').alignment = WD_ALIGN_PARAGRAPH.CENTER
+            doc.add_paragraph('References').alignment = WD_ALIGN_PARAGRAPH.CENTER
             ref = doc.add_paragraph(p1)
             ref.add_run(j_title).italic = True
             ref.add_run(j_volume).italic = True
