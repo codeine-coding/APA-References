@@ -1,7 +1,6 @@
 from tkinter import *
 from classes import *
 import tkinter.filedialog
-import docx
 
 primary = '#222b34'
 text_color = '#ffffff'
@@ -13,6 +12,18 @@ btn_active = '#501f75'
 def create_separator(parent=None):
     separator = Frame(parent, height=2, bd=1, relief=FLAT, bg=separators)
     separator.pack(fill=X, padx=5, pady=5)
+
+
+def save_as_docx(event=None):
+    try:
+        input_file_name = tkinter.filedialog.asksaveasfilename(defaultextension='.docx',
+                                                               filetypes=[
+                                                                   ("Word Documents", '*.docx')
+                                                               ])
+        if input_file_name:
+            Reference.create_word_doc(input_file_name)
+    except PermissionError:
+        print("File open elsewhere!")
 
 
 class ApaReference(Frame):
@@ -168,7 +179,7 @@ class ApaReference(Frame):
                relief=FLAT, command=self.save_as_txt).grid(row=0, sticky=SW)
         Button(save_btn_frame, text='Save as Word File', bg=btn_primary, activebackground=btn_active,
                activeforeground=text_color, fg=text_color,
-               relief=FLAT, command=self.save_as_docx).grid(row=0, column=1, sticky=SE)
+               relief=FLAT, command=save_as_docx).grid(row=0, column=1, sticky=SE)
         save_btn_frame.pack(anchor=SE)
 
     def create_contributor_listbox(self, parent):
@@ -205,6 +216,12 @@ class ApaReference(Frame):
         self.create_generated_reference_frame(content_text_frame)
         content_text_frame.pack(expand='yes', side=LEFT, anchor=NW, fill=BOTH)
 
+        vars_to_eval = ('article_title', 'contributor_first_name', 'contributor_middle_name', 'contributor_last_name',
+                        'journal_title', 'journal_volume', 'journal_issue', 'year_published', 'pages_start',
+                        'pages_end', 'doi')
+        for v in vars_to_eval:
+            eval('self.' + v).set(v)
+
     def save_as_txt(self, event=None):
         input_file_name = tkinter.filedialog.asksaveasfilename(defaultextension='.txt',
                                                                filetypes=[
@@ -221,20 +238,6 @@ class ApaReference(Frame):
         except IOError:
             pass
 
-    def save_as_docx(self, event=None):
-        input_file_name = tkinter.filedialog.asksaveasfilename(defaultextension='.docx',
-                                                               filetypes=[
-                                                                   ("Word Documents", '*.docx')
-                                                               ])
-        if input_file_name:
-            self.create_word_doc(input_file_name)
-
-    def create_word_doc(self, filename):
-        doc = docx.Document()
-        for r in sorted(Reference.references):
-            doc.add_paragraph(r)
-        doc.save(filename)
-
     def update_contributor_list(self):
         contributors = sorted(Contributor.contributors)
         self.contributor_listbox.delete(0, END)
@@ -242,10 +245,10 @@ class ApaReference(Frame):
             self.contributor_listbox.insert(END, c)
 
     def update_reference_list(self):
-        references = sorted(Reference.references)
+        references = Reference.get_sorted_references()
         self.ref_listbox.delete(0, END)
         for r in references:
-            self.ref_listbox.insert(END, r)
+            self.ref_listbox.insert(END, r.journal.article_title)
 
     def add_contributor(self):
         Contributor(self.contributor_first_name.get(), self.contributor_middle_name.get(),
@@ -264,7 +267,7 @@ class ApaReference(Frame):
                           self.pages_start.get(), self.pages_end.get(), self.journal_volume.get(),
                           self.journal_issue.get(), self.doi.get())
 
-        Reference(authors, journal.get_journal_entry())
+        Reference(authors, journal)
 
         # reset all reference entry fields to empty
         vars_to_eval = ('article_title', 'contributor_first_name', 'contributor_middle_name', 'contributor_last_name',
@@ -279,7 +282,7 @@ class ApaReference(Frame):
 
     def generate(self):
         self.content_text.delete(1.0, END)
-        references = '\n\n'.join(sorted(Reference.references))
+        references = '\n\n'.join(sorted(Reference.formatted_references))
         self.content_text.insert(1.0, references)
 
 

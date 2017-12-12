@@ -1,3 +1,7 @@
+import docx
+from docx.enum.text import WD_ALIGN_PARAGRAPH
+
+
 class Contributor:
     contributors = []
 
@@ -31,8 +35,13 @@ class Journal:
         self.article_title = article_title
         self.journal_title = journal_title
         self.year_published = year_published
-        self.pages = f"{page_start}-{page_end}." if page_start != '' and page_end != '' else ''
+        self.page_start = page_start
+        self.page_end = page_end
+        self.volume = volume
+        self.issue = issue
+        self.doi = doi_or_website
 
+        self.pages = f"{page_start}-{page_end}." if page_start != '' and page_end != '' else ''
         self.volume_issue = ''
         if volume != '' and issue != '':
             self.volume_issue = f"{volume}({issue}),"
@@ -45,21 +54,71 @@ class Journal:
         # Last, F. M., Jr. (year). Article Title. Journal Title, Volume(Issue), series, P-Start-P-End.
         # doi:DOI_OR_WEBSITE
 
-        self.journal = "({}). {}. {},{} {} {}".format(self.year_published, self.article_title, self.journal_title,
-                                                      self.volume_issue, self.pages, self.doi_or_website)
-        if self.journal[-1] == ',':
-            self.journal = self.journal[0:-1] + '.'
-
     def get_journal_entry(self):
-        return self.journal
+        journal = "({}). {}. {},{} {} {}".format(self.year_published, self.article_title, self.journal_title,
+                                                 self.volume_issue, self.pages, self.doi_or_website)
+        if journal[-1] == ',':
+            journal = journal[0:-1] + '.'
+        return journal
 
 
 class Reference:
     references = []
+    formatted_references = []
 
     def __init__(self, contributors, journal):
-        self.reference = f"{contributors} {journal}"
-        self.references.append(self.reference)
+        self.contributors = contributors
+        self.journal = journal
+        self.references.append(self)
+        self.formatted_reference = f"{self.contributors} {self.journal.get_journal_entry()}"
+        self.formatted_references.append(self.formatted_reference)
 
-    def get_reference(self):
-        return self.reference
+    @classmethod
+    def get_sorted_references(cls):
+        return sorted(cls.references, key=lambda x: x.contributors)
+
+    @classmethod
+    def create_word_doc(cls, filename):
+        doc = docx.Document()
+        for r in cls.get_sorted_references():
+            p1 = f"{r.contributors} ({r.journal.year_published}). {r.journal.article_title}. "
+
+            if r.journal.volume_issue != '' or r.journal.pages != '':
+                j_title = r.journal.journal_title + ", "
+            else:
+                j_title = r.journal.journal_title + ". "
+
+            if r.journal.volume != '' and r.journal.issue != '':
+                j_volume = f"{r.journal.volume}"
+            elif r.journal.volume != "" and (r.journal.pages == '' or r.journal.doi == ''):
+                j_volume = f"{r.journal.volume}."
+            else:
+                j_volume = ''
+
+            if r.journal.issue != '' and r.journal.pages != '':
+                j_issue = f"({r.journal.issue}), "
+            elif r.journal.issue != '' and r.pages == '':
+                j_issue = f"({r.journal.issue})."
+            else:
+                j_issue = ''
+
+            if r.journal.page_start != '' and r.journal.page_end != '':
+                j_pages = f"{r.journal.page_start}-{r.journal.page_end}."
+            elif r.journal.page_start != '' and r.journal.page_end == '':
+                j_pages = f"{r.journal.page_start}."
+            else:
+                j_pages = ''
+
+            if r.journal.doi != '':
+                j_doi = f" {r.journal.doi}"
+            else:
+                j_doi = ''
+            doc.add_paragraph('Work Cited').alignment = WD_ALIGN_PARAGRAPH.CENTER
+            ref = doc.add_paragraph(p1)
+            ref.add_run(j_title).italic = True
+            ref.add_run(j_volume).italic = True
+            ref.add_run(j_issue)
+            ref.add_run(j_pages)
+            ref.add_run(j_doi)
+
+        doc.save(filename)
