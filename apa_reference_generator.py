@@ -37,6 +37,7 @@ class ApaReference(Frame):
         self.content_text = None
         self.contributor_listbox = None
         self.ref_listbox = None
+        self.contributor_first_name_entry = None
 
         # Variables
         self.article_title = StringVar()
@@ -76,7 +77,9 @@ class ApaReference(Frame):
               bg=primary, fg=text_color).grid(row=0, columnspan=3, sticky=W)
         # first name
         Label(contributors_frame, text='First Name', bg=primary, fg=text_color).grid(row=1, sticky=W)
-        Entry(contributors_frame, width=20, textvariable=self.contributor_first_name).grid(row=2, column=0, sticky=W)
+        self.contributor_first_name_entry = Entry(contributors_frame, width=20,
+                                                  textvariable=self.contributor_first_name)
+        self.contributor_first_name_entry.grid(row=2, column=0, sticky=W)
         # middle name
         Label(contributors_frame, text='MI', bg=primary, fg=text_color).grid(row=1, column=1, sticky=W)
         Entry(contributors_frame, width=5, textvariable=self.contributor_middle_name).grid(row=2, column=1, sticky=W)
@@ -253,6 +256,8 @@ class ApaReference(Frame):
         vars_to_eval = ('contributor_first_name', 'contributor_middle_name', 'contributor_last_name')
         for v in vars_to_eval:
             eval('self.' + v).set('')
+
+        self.contributor_first_name_entry.focus_set()
 
     def add_reference(self):
         authors = Contributor.get_contributors()
