@@ -14,7 +14,7 @@ def create_separator(parent=None):
     separator.pack(fill=X, padx=5, pady=5)
 
 
-def save_as_docx(event=None):
+def save_as_docx():
     try:
         input_file_name = tkinter.filedialog.asksaveasfilename(defaultextension='.docx',
                                                                filetypes=[
@@ -38,6 +38,7 @@ class ApaReference(Frame):
         self.contributor_listbox = None
         self.ref_listbox = None
         self.contributor_first_name_entry = None
+        self.article_title_entry = None
 
         # Variables
         self.article_title = StringVar()
@@ -68,7 +69,8 @@ class ApaReference(Frame):
     def create_article_section(self, parent):
         article_frame = Frame(parent, padx=5, pady=5, bg=primary)
         Label(article_frame, text='Article Title:', bg=primary, fg=text_color).grid(row=0, sticky=W)
-        Entry(article_frame, width=46, textvariable=self.article_title).grid(row=1, column=0, sticky=W)
+        self.article_title_entry = Entry(article_frame, width=46, textvariable=self.article_title)
+        self.article_title_entry.grid(row=1, column=0, sticky=W)
         article_frame.pack(anchor=W)
 
     def create_contributors_section(self, parent):
@@ -219,7 +221,7 @@ class ApaReference(Frame):
         self.create_generated_reference_frame(content_text_frame)
         content_text_frame.pack(expand='yes', side=LEFT, anchor=NW, fill=BOTH)
 
-    def save_as_txt(self, event=None):
+    def save_as_txt(self):
         input_file_name = tkinter.filedialog.asksaveasfilename(defaultextension='.txt',
                                                                filetypes=[
                                                                    ("Text Documents", '*.txt')
@@ -278,6 +280,7 @@ class ApaReference(Frame):
         Contributor.contributors.clear()
         self.update_contributor_list()
         self.update_reference_list()
+        self.article_title_entry.focus_set()
 
     def generate(self):
         self.content_text.delete(1.0, END)
