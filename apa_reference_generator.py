@@ -56,14 +56,14 @@ class ApaReference(Frame):
         self.master.geometry(f'{w}x{h}+{x}+{y}')
 
     def create_article_section(self, parent):
-        article_frame = Frame(parent, padx=5, pady=5, bg=primary)
+        article_frame = Section(parent)
         PrimaryLabel(article_frame, text='Article Title:').grid(row=0, sticky=W)
         self.article_title_entry = Entry(article_frame, width=46, textvariable=self.article_title)
         self.article_title_entry.grid(row=1, column=0, sticky=W)
         article_frame.pack(anchor=W)
 
     def create_contributors_section(self, parent):
-        contributors_frame = Frame(parent, padx=5, pady=5, bg=primary)
+        contributors_frame = Section(parent)
         PrimaryLabel(contributors_frame, text='Contributors:', font=('', 11, 'bold')).grid(row=0, columnspan=3,
                                                                                            sticky=W)
         # first name
@@ -80,13 +80,13 @@ class ApaReference(Frame):
         contributors_frame.pack(anchor=W)
 
         # Add Contributor Button
-        add_contributor_btn = Frame(parent, padx=5, pady=5, bg=primary)
+        add_contributor_btn = Section(parent)
         PrimaryButton(add_contributor_btn, text='+ Add another contributor',
                       command=self.add_contributor).pack(anchor=E)
         add_contributor_btn.pack(anchor=E)
 
     def create_journal_info_section(self, parent):
-        journal_pub_info_frame = Frame(parent, padx=5, pady=5, bg=primary)
+        journal_pub_info_frame = Section(parent)
         journal_pub_info_label = Label(parent, text='Journal Publication Info', padx=5, bg=primary, fg=text_color)
 
         # Journal title
@@ -134,10 +134,10 @@ class ApaReference(Frame):
         journal_pub_info_frame.pack(anchor=W)
 
         # Generate Button
-        add_ref_frame = Frame(parent, padx=5, pady=5, bg=primary)
+        add_ref_frame = Section(parent)
         PrimaryButton(add_ref_frame, text='Add Reference', command=self.add_reference).pack(expand=0, fill=X)
         add_ref_frame.pack(expand=0, fill=X)
-        generate_frame = Frame(parent, padx=5, pady=5, bg=primary)
+        generate_frame = Section(parent)
         gen_button = PrimaryButton(generate_frame, text='Generate',  command=self.generate)
         gen_button.pack(expand=0, fill=X)
         generate_frame.pack(expand=0, fill=X)

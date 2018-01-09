@@ -28,3 +28,10 @@ class PrimaryLabel(Label):
     def __init__(self, master, **options):
         Label.__init__(self, master, **options)
         self.config(bg=primary, fg=text_color)
+
+
+class Section(Frame):
+    """create section styling"""
+    def __init__(self, master, **options):
+        Frame.__init__(self, master, **options)
+        self.config(padx=5, pady=5, bg=primary)
