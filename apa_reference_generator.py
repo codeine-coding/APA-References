@@ -1,17 +1,6 @@
-from tkinter import *
 from classes import *
+from apa_widgets import *
 import tkinter.filedialog
-
-primary = '#222b34'
-text_color = '#ffffff'
-separators = '#662d91'
-btn_primary = '#662d91'
-btn_active = '#501f75'
-
-
-def create_separator(parent=None):
-    separator = Frame(parent, height=2, bd=1, relief=FLAT, bg=separators)
-    separator.pack(fill=X, padx=5, pady=5)
 
 
 def save_as_docx():
@@ -24,21 +13,6 @@ def save_as_docx():
             Reference.create_word_doc(input_file_name)
     except PermissionError:
         print("File open elsewhere!")
-
-
-class PrimaryButton(Button):
-    """Create Primary styling for buttons"""
-    def __init__(self, master, **options):
-        Button.__init__(self, master, **options)
-        self.config(bg=btn_primary, activebackground=btn_active,
-                    activeforeground=text_color, fg=text_color, relief=FLAT,)
-
-
-class PrimaryLabel(Label):
-    """Create Primary styling for Labels"""
-    def __init__(self, master, **options):
-        Label.__init__(self, master, **options)
-        self.config(bg=primary, fg=text_color)
 
 
 class ApaReference(Frame):
@@ -208,13 +182,13 @@ class ApaReference(Frame):
     def build_apa_generator(self):
         # Title Label
         PrimaryLabel(self.master, text='APA References Generator', font=('', 14, 'bold'), padx=5).pack()
-        create_separator()
+        Separator()
         details_frame = Frame(self.master, bg=primary)
         # Article Frame
         self.create_article_section(details_frame)
         # Contributors Frame
         self.create_contributors_section(details_frame)
-        create_separator(details_frame)
+        Separator(details_frame)
         # Journal Info
         self.create_journal_info_section(details_frame)
         details_frame.pack(side=LEFT)
