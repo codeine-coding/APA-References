@@ -26,6 +26,14 @@ def save_as_docx():
         print("File open elsewhere!")
 
 
+class PrimaryButton(Button):
+    """Create Primary styling for buttons"""
+    def __init__(self, master, **options):
+        Button.__init__(self, master, **options)
+        self.config(bg=btn_primary, activebackground=btn_active,
+                    activeforeground=text_color, fg=text_color, relief=FLAT,)
+
+
 class ApaReference(Frame):
     def __init__(self):
         Frame.__init__(self)
@@ -92,8 +100,8 @@ class ApaReference(Frame):
 
         # Add Contributor Button
         add_contributor_btn = Frame(parent, padx=5, pady=5, bg=primary)
-        Button(add_contributor_btn, text='+ Add another contributor', bg=btn_primary, activebackground=btn_active,
-               activeforeground=text_color, fg=text_color, relief=FLAT, command=self.add_contributor).pack(anchor=E)
+        PrimaryButton(add_contributor_btn, text='+ Add another contributor',
+                      command=self.add_contributor).pack(anchor=E)
         add_contributor_btn.pack(anchor=E)
 
     def create_journal_info_section(self, parent):
@@ -146,13 +154,10 @@ class ApaReference(Frame):
 
         # Generate Button
         add_ref_frame = Frame(parent, padx=5, pady=5, bg=primary)
-        Button(add_ref_frame, text='Add Reference', bg=btn_primary, activebackground=btn_active,
-               activeforeground=text_color, fg=text_color, relief=FLAT,
-               command=self.add_reference).pack(expand=0, fill=X)
+        PrimaryButton(add_ref_frame, text='Add Reference', command=self.add_reference).pack(expand=0, fill=X)
         add_ref_frame.pack(expand=0, fill=X)
         generate_frame = Frame(parent, padx=5, pady=5, bg=primary)
-        gen_button = Button(generate_frame, text='Generate', bg=btn_primary, activebackground=btn_active,
-                            activeforeground=text_color, fg=text_color, relief=FLAT, command=self.generate)
+        gen_button = PrimaryButton(generate_frame, text='Generate',  command=self.generate)
         gen_button.pack(expand=0, fill=X)
         generate_frame.pack(expand=0, fill=X)
 
@@ -179,12 +184,8 @@ class ApaReference(Frame):
         save_btn_frame = Frame(parent, bg=primary)
         save_btn_frame.grid_rowconfigure(0, pad=5)
         save_btn_frame.grid_columnconfigure(0, pad=5)
-        Button(save_btn_frame, text='Save as Text File', bg=btn_primary, activebackground=btn_active,
-               activeforeground=text_color, fg=text_color,
-               relief=FLAT, command=self.save_as_txt).grid(row=0, sticky=SW)
-        Button(save_btn_frame, text='Save as Word File', bg=btn_primary, activebackground=btn_active,
-               activeforeground=text_color, fg=text_color,
-               relief=FLAT, command=save_as_docx).grid(row=0, column=1, sticky=SE)
+        PrimaryButton(save_btn_frame, text='Save as Text File', command=self.save_as_txt).grid(row=0, sticky=SW)
+        PrimaryButton(save_btn_frame, text='Save as Word File',  command=save_as_docx).grid(row=0, column=1, sticky=SE)
         save_btn_frame.pack(anchor=SE)
 
     def create_contributor_listbox(self, parent):
