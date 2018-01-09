@@ -34,6 +34,13 @@ class PrimaryButton(Button):
                     activeforeground=text_color, fg=text_color, relief=FLAT,)
 
 
+class PrimaryLabel(Label):
+    """Create Primary styling for Labels"""
+    def __init__(self, master, **options):
+        Label.__init__(self, master, **options)
+        self.config(bg=primary, fg=text_color)
+
+
 class ApaReference(Frame):
     def __init__(self):
         Frame.__init__(self)
@@ -76,25 +83,25 @@ class ApaReference(Frame):
 
     def create_article_section(self, parent):
         article_frame = Frame(parent, padx=5, pady=5, bg=primary)
-        Label(article_frame, text='Article Title:', bg=primary, fg=text_color).grid(row=0, sticky=W)
+        PrimaryLabel(article_frame, text='Article Title:').grid(row=0, sticky=W)
         self.article_title_entry = Entry(article_frame, width=46, textvariable=self.article_title)
         self.article_title_entry.grid(row=1, column=0, sticky=W)
         article_frame.pack(anchor=W)
 
     def create_contributors_section(self, parent):
         contributors_frame = Frame(parent, padx=5, pady=5, bg=primary)
-        Label(contributors_frame, text='Contributors:', font=('', 11, 'bold'),
-              bg=primary, fg=text_color).grid(row=0, columnspan=3, sticky=W)
+        PrimaryLabel(contributors_frame, text='Contributors:', font=('', 11, 'bold')).grid(row=0, columnspan=3,
+                                                                                           sticky=W)
         # first name
-        Label(contributors_frame, text='First Name', bg=primary, fg=text_color).grid(row=1, sticky=W)
+        PrimaryLabel(contributors_frame, text='First Name').grid(row=1, sticky=W)
         self.contributor_first_name_entry = Entry(contributors_frame, width=20,
                                                   textvariable=self.contributor_first_name)
         self.contributor_first_name_entry.grid(row=2, column=0, sticky=W)
         # middle name
-        Label(contributors_frame, text='MI', bg=primary, fg=text_color).grid(row=1, column=1, sticky=W)
+        PrimaryLabel(contributors_frame, text='MI').grid(row=1, column=1, sticky=W)
         Entry(contributors_frame, width=5, textvariable=self.contributor_middle_name).grid(row=2, column=1, sticky=W)
         # last name
-        Label(contributors_frame, text='Last Name', bg=primary, fg=text_color).grid(row=1, column=2, sticky=W)
+        PrimaryLabel(contributors_frame, text='Last Name').grid(row=1, column=2, sticky=W)
         Entry(contributors_frame, width=20, textvariable=self.contributor_last_name).grid(row=2, column=2, sticky=W)
         contributors_frame.pack(anchor=W)
 
@@ -110,18 +117,18 @@ class ApaReference(Frame):
 
         # Journal title
         journal_title_frame = Frame(journal_pub_info_frame, bg=primary)
-        Label(journal_title_frame, text="Journal Title:", bg=primary, fg=text_color).grid(row=0, column=0, sticky=W)
+        PrimaryLabel(journal_title_frame, text="Journal Title:").grid(row=0, column=0, sticky=W)
         Entry(journal_title_frame, width=46, textvariable=self.journal_title).grid(row=1, column=0, sticky=W)
         journal_title_frame.pack(anchor=W)
 
         # Additional Info
-        Label(journal_pub_info_frame, text="Additional Info", pady=10, bg=primary, fg=text_color).pack(anchor=W)
+        PrimaryLabel(journal_pub_info_frame, text="Additional Info", pady=10).pack(anchor=W)
         journal_advanced_info_frame = Frame(journal_pub_info_frame, pady=5, bg=primary)
 
-        Label(journal_advanced_info_frame, text="Volume", bg=primary, fg=text_color).grid(row=2, column=0, sticky=W)
+        PrimaryLabel(journal_advanced_info_frame, text="Volume").grid(row=2, column=0, sticky=W)
         Entry(journal_advanced_info_frame, width=12, textvariable=self.journal_volume).grid(row=3, column=0, sticky=W)
 
-        Label(journal_advanced_info_frame, text='Issue', bg=primary, fg=text_color).grid(row=2, column=1, sticky=W)
+        PrimaryLabel(journal_advanced_info_frame, text='Issue').grid(row=2, column=1, sticky=W)
         Entry(journal_advanced_info_frame, width=12, textvariable=self.journal_issue).grid(row=3, column=1, sticky=W)
 
         journal_advanced_info_frame.pack(anchor=W)
@@ -129,23 +136,23 @@ class ApaReference(Frame):
         # Year Published
         year_published_frame = Frame(journal_pub_info_frame, pady=5, bg=primary)
 
-        Label(year_published_frame, text='Year Published:', bg=primary, fg=text_color).grid(row=0, sticky=W)
+        PrimaryLabel(year_published_frame, text='Year Published:').grid(row=0, sticky=W)
         Entry(year_published_frame, width=12, textvariable=self.year_published).grid(row=1, column=0, sticky=W)
         year_published_frame.pack(anchor=W)
         # Pages - Start, End
         pub_pages_frame = Frame(journal_pub_info_frame, pady=5, bg=primary)
-        Label(pub_pages_frame, text='Pages:', bg=primary, fg=text_color).grid(row=0, columnspan=2, sticky=W)
+        PrimaryLabel(pub_pages_frame, text='Pages:').grid(row=0, columnspan=2, sticky=W)
 
-        Label(pub_pages_frame, text='Start', bg=primary, fg=text_color).grid(row=1, column=0, sticky=W)
+        PrimaryLabel(pub_pages_frame, text='Start').grid(row=1, column=0, sticky=W)
         Entry(pub_pages_frame, width=5, textvariable=self.pages_start).grid(row=2, column=0, sticky=W)
 
-        Label(pub_pages_frame, text='End', bg=primary, fg=text_color).grid(row=1, column=1, sticky=W)
+        PrimaryLabel(pub_pages_frame, text='End').grid(row=1, column=1, sticky=W)
         Entry(pub_pages_frame, width=5, textvariable=self.pages_end).grid(row=2, column=1, sticky=W)
         pub_pages_frame.pack(anchor=W)
         # DOI
         pub_doi_frame = Frame(journal_pub_info_frame, bg=primary)
 
-        Label(pub_doi_frame, text='DOI/Website:', bg=primary, fg=text_color).grid(row=0, sticky=W)
+        PrimaryLabel(pub_doi_frame, text='DOI/Website:').grid(row=0, sticky=W)
         Entry(pub_doi_frame, width=46, textvariable=self.doi).grid(row=1, column=0, sticky=W)
         pub_doi_frame.pack(anchor=W)
 
@@ -162,7 +169,7 @@ class ApaReference(Frame):
         generate_frame.pack(expand=0, fill=X)
 
     def create_generated_reference_frame(self, parent):
-        Label(parent, text='Generated References', bg=primary, fg=text_color).pack(anchor=W)
+        PrimaryLabel(parent, text='Generated References').pack(anchor=W)
         content_text_frame = Frame(parent)
         self.content_text = Text(content_text_frame)
         self.content_text.pack(expand='yes', fill='both', side=LEFT, anchor=NW)
@@ -189,19 +196,18 @@ class ApaReference(Frame):
         save_btn_frame.pack(anchor=SE)
 
     def create_contributor_listbox(self, parent):
-        Label(parent, text='Current Article Contributors', bg=primary, fg=text_color).pack()
+        PrimaryLabel(parent, text='Current Article Contributors').pack()
         self.contributor_listbox = Listbox(parent)
         self.contributor_listbox.pack(fill=BOTH)
 
     def create_reference_listbox(self, parent):
-        Label(parent, text='Current References', bg=primary, fg=text_color).pack()
+        PrimaryLabel(parent, text='Current References').pack()
         self.ref_listbox = Listbox(parent)
         self.ref_listbox.pack(fill=BOTH)
 
     def build_apa_generator(self):
         # Title Label
-        Label(self.master, text='APA References Generator', font=('', 14, 'bold'),
-              padx=5, bg=primary, fg=text_color).pack()
+        PrimaryLabel(self.master, text='APA References Generator', font=('', 14, 'bold'), padx=5).pack()
         create_separator()
         details_frame = Frame(self.master, bg=primary)
         # Article Frame
