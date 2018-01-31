@@ -1,4 +1,4 @@
-from tkinter import *
+from tkinter import Frame, Button, Label, FLAT, X
 
 primary = '#222b34'
 text_color = '#ffffff'
