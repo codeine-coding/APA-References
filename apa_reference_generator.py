@@ -1,6 +1,8 @@
 from classes import *
 from apa_widgets import *
 import tkinter.filedialog
+from sections.contributor import ContributorSection
+from tkinter import *
 
 
 def save_as_docx():
@@ -62,28 +64,28 @@ class ApaReference(Frame):
         self.article_title_entry.grid(row=1, column=0, sticky=W)
         article_frame.pack(anchor=W)
 
-    def create_contributors_section(self, parent):
-        contributors_frame = Section(parent)
-        PrimaryLabel(contributors_frame, text='Contributors:', font=('', 11, 'bold')).grid(row=0, columnspan=3,
-                                                                                           sticky=W)
-        # first name
-        PrimaryLabel(contributors_frame, text='First Name').grid(row=1, sticky=W)
-        self.contributor_first_name_entry = Entry(contributors_frame, width=20,
-                                                  textvariable=self.contributor_first_name)
-        self.contributor_first_name_entry.grid(row=2, column=0, sticky=W)
-        # middle name
-        PrimaryLabel(contributors_frame, text='MI').grid(row=1, column=1, sticky=W)
-        Entry(contributors_frame, width=5, textvariable=self.contributor_middle_name).grid(row=2, column=1, sticky=W)
-        # last name
-        PrimaryLabel(contributors_frame, text='Last Name').grid(row=1, column=2, sticky=W)
-        Entry(contributors_frame, width=20, textvariable=self.contributor_last_name).grid(row=2, column=2, sticky=W)
-        contributors_frame.pack(anchor=W)
+    # def create_contributors_section(self, parent):
+    #     contributors_frame = Section(parent)
+    #     PrimaryLabel(contributors_frame, text='Contributors:', font=('', 11, 'bold')).grid(row=0, columnspan=3,
+    #                                                                                        sticky=W)
+    #     # first name
+    #     PrimaryLabel(contributors_frame, text='First Name').grid(row=1, sticky=W)
+    #     self.contributor_first_name_entry = Entry(contributors_frame, width=20,
+    #                                               textvariable=self.contributor_first_name)
+    #     self.contributor_first_name_entry.grid(row=2, column=0, sticky=W)
+    #     # middle name
+    #     PrimaryLabel(contributors_frame, text='MI').grid(row=1, column=1, sticky=W)
+    #     Entry(contributors_frame, width=5, textvariable=self.contributor_middle_name).grid(row=2, column=1, sticky=W)
+    #     # last name
+    #     PrimaryLabel(contributors_frame, text='Last Name').grid(row=1, column=2, sticky=W)
+    #     Entry(contributors_frame, width=20, textvariable=self.contributor_last_name).grid(row=2, column=2, sticky=W)
+    #     contributors_frame.pack(anchor=W)
 
-        # Add Contributor Button
-        add_contributor_btn = Section(parent)
-        PrimaryButton(add_contributor_btn, text='+ Add another contributor',
-                      command=self.add_contributor).pack(anchor=E)
-        add_contributor_btn.pack(anchor=E)
+        # # Add Contributor Button
+        # add_contributor_btn = Section(parent)
+        # PrimaryButton(add_contributor_btn, text='+ Add another contributor',
+        #               command=self.add_contributor).pack(anchor=E)
+        # add_contributor_btn.pack(anchor=E)
 
     def create_journal_info_section(self, parent):
         journal_pub_info_frame = Section(parent)
@@ -187,7 +189,8 @@ class ApaReference(Frame):
         # Article Frame
         self.create_article_section(details_frame)
         # Contributors Frame
-        self.create_contributors_section(details_frame)
+        # self.create_contributors_section(details_frame)
+        ContributorSection(master=details_frame)
         Separator(details_frame)
         # Journal Info
         self.create_journal_info_section(details_frame)
