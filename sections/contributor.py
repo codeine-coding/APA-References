@@ -1,4 +1,4 @@
-from tkinter import Entry, W, E, StringVar, END
+from tkinter import Entry, W, E, StringVar, END, Listbox, BOTH
 
 from apa_widgets import *
 
@@ -27,9 +27,11 @@ class ContributorSection(Section):
         Entry(contributors_frame, width=20, textvariable=self.contributor_last_name).grid(row=2, column=2, sticky=W)
         contributors_frame.pack(anchor=W)
 
-        # Add Contributor Button
-        add_contributor_btn = Section(self.master)
-        PrimaryButton(add_contributor_btn, text='+ Add another contributor',
-                      # command=self.add_contributor
-                      ).pack(anchor=E)
-        add_contributor_btn.pack(anchor=E)
+
+class ContributorListBox(Section):
+    def __init__(self, master, **options):
+        Section.__init__(self, master, **options)
+
+        PrimaryLabel(self.master, text='Current Article Contributors').pack()
+        self.contributor_listbox = Listbox(self.master)
+        self.contributor_listbox.pack(fill=BOTH)
