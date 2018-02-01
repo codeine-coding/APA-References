@@ -1,4 +1,3 @@
-from tkinter import *
 from apa_widgets import *
 from models.contributor import Contributor
 from models.journal import Journal
@@ -7,6 +6,7 @@ from sections.contributor import ContributorSection, ContributorListBox
 from sections.journal import JournalSection
 from sections.reference import ReferenceListSection
 from utils import save_as_docx
+from tkinter import StringVar, Entry, END, LEFT, W, E, N, SW, SE
 
 
 class ApaReference(Frame):
