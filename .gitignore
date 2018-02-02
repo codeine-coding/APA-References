@@ -141,6 +141,7 @@ venv.bak/
 apaenv/
 classes.py
 apa_reference_generator.py
+setup.py
 
 # Spyder project settings
 .spyderproject
