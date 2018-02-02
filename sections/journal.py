@@ -1,9 +1,10 @@
-from apa_widgets import *
 from tkinter import (
     Entry,
     StringVar,
     W
 )
+
+from utils.apa_widgets import *
 
 
 class JournalSection(Section):

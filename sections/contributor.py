@@ -1,6 +1,6 @@
-from tkinter import Entry, W, E, StringVar, END, Listbox, BOTH
+from tkinter import Entry, W, StringVar, Listbox, BOTH
 
-from apa_widgets import *
+from utils.apa_widgets import *
 
 
 class ContributorSection(Section):

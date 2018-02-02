@@ -1,6 +1,6 @@
 from tkinter import Listbox, BOTH
 
-from apa_widgets import Section, PrimaryLabel
+from utils.apa_widgets import Section, PrimaryLabel
 
 
 class ReferenceListSection(Section):

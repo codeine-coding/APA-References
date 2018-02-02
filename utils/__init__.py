@@ -1,12 +1,10 @@
 import tkinter.filedialog
+
 import docx
 from docx.enum.text import WD_ALIGN_PARAGRAPH
-from tkinter import Entry, W, LEFT, SW, N, SE
-from apa_widgets import *
+
 from models.reference import Reference
-from sections.contributor import ContributorSection, ContributorListBox
-from sections.journal import JournalSection
-from sections.reference import ReferenceListSection
+from utils.apa_widgets import *
 
 
 def save_as_docx():

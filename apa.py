@@ -1,4 +1,5 @@
-from apa_widgets import *
+from tkinter import StringVar, Entry, END, LEFT, W, E, N, SW, SE
+
 from models.contributor import Contributor
 from models.journal import Journal
 from models.reference import Reference
@@ -6,7 +7,7 @@ from sections.contributor import ContributorSection, ContributorListBox
 from sections.journal import JournalSection
 from sections.reference import ReferenceListSection
 from utils import save_as_docx
-from tkinter import StringVar, Entry, END, LEFT, W, E, N, SW, SE
+from utils.apa_widgets import *
 
 
 class ApaReference(Frame):
@@ -85,7 +86,7 @@ class ApaReference(Frame):
         save_btn_frame = Frame(listbox_frame, bg=primary)
         save_btn_frame.grid_rowconfigure(0, pad=5)
         save_btn_frame.grid_columnconfigure(0)
-        PrimaryButton(save_btn_frame, text='Save as Word File',  command=save_as_docx).grid(row=0, column=0, sticky=SW)
+        PrimaryButton(save_btn_frame, text='Save as Word File', command=save_as_docx).grid(row=0, column=0, sticky=SW)
         save_btn_frame.pack(anchor=SE)
         listbox_frame.pack(side=LEFT, anchor=N)
 
