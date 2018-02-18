@@ -1,38 +1,36 @@
 import unittest
+
 from models.contributor import Contributor
 
 
 class ContributorFormattingTest(unittest.TestCase):
-    def test_full_name_with_middle(self):
+    def setUp(self):
         Contributor.contributors.clear()
+
+    def test_full_name_with_middle(self):
         Contributor('John', 'Allen', 'Smith')
         self.assertEqual('Smith,J.A.', Contributor.contributors[0])
 
     def test_name_without_middle(self):
-        Contributor.contributors.clear()
         Contributor('John', '', 'Smith')
         self.assertEqual('Smith,J.', Contributor.contributors[0])
 
     def test_one_contributor(self):
-        Contributor.contributors.clear()
         Contributor('John', 'Allen', 'Smith')
         self.assertEqual('Smith,J.A.', Contributor.get_contributors())
 
     def test_two_contributors(self):
-        Contributor.contributors.clear()
         Contributor('John', '', 'Smith')
         Contributor('Jane', 'Alexa', 'Doe')
         self.assertEqual('Smith,J., & Doe,J.A.', Contributor.get_contributors())
 
     def test_three_contributors(self):
-        Contributor.contributors.clear()
         Contributor('John', '', 'Smith')
         Contributor('Jane', 'Alexa', 'Doe')
         Contributor('Chris', 'Pea', 'Bacon')
         self.assertEqual('Smith,J., Doe,J.A., & Bacon,C.P.', Contributor.get_contributors())
 
     def test_four_contributors(self):
-        Contributor.contributors.clear()
         Contributor('John', '', 'Smith')
         Contributor('Jane', 'Alexa', 'Doe')
         Contributor('Chris', 'Pea', 'Bacon')
@@ -41,7 +39,6 @@ class ContributorFormattingTest(unittest.TestCase):
         pass
 
     def test_five_contributors(self):
-        Contributor.contributors.clear()
         Contributor('John', '', 'Smith')
         Contributor('Jane', 'Alexa', 'Doe')
         Contributor('Chris', 'Pea', 'Bacon')
@@ -51,7 +48,6 @@ class ContributorFormattingTest(unittest.TestCase):
         pass
 
     def test_six_contributors(self):
-        Contributor.contributors.clear()
         Contributor('John', '', 'Smith')
         Contributor('Jane', 'Alexa', 'Doe')
         Contributor('Chris', 'Pea', 'Bacon')
@@ -63,7 +59,6 @@ class ContributorFormattingTest(unittest.TestCase):
         pass
 
     def test_seven_contributors(self):
-        Contributor.contributors.clear()
         Contributor('John', '', 'Smith')
         Contributor('Jane', 'Alexa', 'Doe')
         Contributor('Chris', 'Pea', 'Bacon')
@@ -76,7 +71,6 @@ class ContributorFormattingTest(unittest.TestCase):
         pass
 
     def test_8_contributors(self):
-        Contributor.contributors.clear()
         Contributor('John', '', 'Smith')
         Contributor('Jane', 'Alexa', 'Doe')
         Contributor('Chris', 'Pea', 'Bacon')
