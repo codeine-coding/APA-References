@@ -16,7 +16,7 @@ class ApaReference(Frame):
         Frame.__init__(self)
         self.master.title('APA References')
         self.master.iconbitmap(r'C:\Users\awhearry\PycharmProjects\APAGenerator\assets\favicon.ico')
-        # self.center_window()
+        self.center_window()
         self.master.resizable(width=True, height=False)
         self.master.config(bg=primary)
         self.contributor_lb = None
@@ -31,8 +31,8 @@ class ApaReference(Frame):
         self.build_apa_generator()
 
     def center_window(self):
-        w = 1155
-        h = 600
+        w = 455
+        h = 570
 
         sw = self.master.winfo_screenwidth()
         sh = self.master.winfo_screenheight()
