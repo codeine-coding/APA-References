@@ -1,21 +1,21 @@
 from tkinter import StringVar, Entry, END, LEFT, W, E, N, SW, SE
 
+from models.reference import Reference
+
 from models.contributor import Contributor
 from models.journal import Journal
 from sections.contributor import ContributorSection, ContributorListBox
 from sections.journal import JournalSection
 from sections.reference import ReferenceListSection
-from utils import save_as_docx
+from utils.funcs import save_as_docx
 from utils.apa_widgets import *
-
-from apa_generator.models.reference import Reference
 
 
 class ApaReference(Frame):
     def __init__(self):
         Frame.__init__(self)
         self.master.title('APA References')
-        self.master.iconbitmap('favicon.ico')
+        self.master.iconbitmap(r'C:\Users\awhearry\PycharmProjects\APAGenerator\assets\favicon.ico')
         # self.center_window()
         self.master.resizable(width=True, height=False)
         self.master.config(bg=primary)
@@ -144,4 +144,5 @@ class ApaReference(Frame):
         self.article_title_entry.focus_set()
 
 
-ApaReference().mainloop()
+if __name__ == '__main__':
+    ApaReference().mainloop()

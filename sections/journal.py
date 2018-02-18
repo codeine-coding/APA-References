@@ -3,6 +3,7 @@ from tkinter import (
     StringVar,
     W
 )
+from utils.apa_widgets import *
 
 
 class JournalSection(Section):

@@ -1,4 +1,5 @@
 from tkinter import Entry, W, StringVar, Listbox, BOTH
+from utils.apa_widgets import *
 
 
 class ContributorSection(Section):

@@ -1,10 +1,8 @@
 import tkinter.filedialog
 
 import docx
+from models.reference import Reference
 from docx.enum.text import WD_ALIGN_PARAGRAPH
-from utils.apa_widgets import *
-
-from apa_generator.models.reference import Reference
 
 
 def save_as_docx():
