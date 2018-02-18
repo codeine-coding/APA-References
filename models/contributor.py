@@ -9,7 +9,7 @@ class Contributor:
 
     @classmethod
     def get_contributors(cls):
-        contributors = sorted(cls.contributors)
+        contributors = cls.contributors
 
         if len(contributors) == 1:
             authors = contributors[0]
